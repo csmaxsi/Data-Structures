@@ -1,0 +1,134 @@
+<?php
+class Node 
+{
+    public int $data;
+    public ?Node $nextNode;
+    
+    public function __construct(int $data)
+    {
+        $this->data = $data;
+        $this->nextNode = null;
+    }
+    
+}
+
+class LinkedList
+{
+    public ?Node $head;
+    
+    public function __construct()
+    {
+        $this->head =null;
+    }
+    
+    
+    public function insertNodeAtstart(int $data) :void
+    {
+        $newNode = new Node($data);
+        $newNode->nextNode = $this->head;
+        $this->head = $newNode ;
+        
+    }
+    
+    public function insertNodeAtEnd(int $data) : void
+    {   
+        $newNode = new Node($data);
+        if($this->head ===null)
+            {  
+                $this->head = $newNode;
+            }
+        else
+             {
+                $currentNode = $this->head;
+                while ($currentNode->nextNode !== null)
+                {
+                    $currentNode = $currentNode->nextNode;
+                }
+                $currentNode->nextNode = $newNode;
+             }
+    }
+    
+    public function deleteNode(int $data)
+    {   
+        
+        $currentNode= $this->head;
+        if($currentNode->data===$data)
+        {
+            
+        }
+    }
+    public function printList() 
+    {
+        $currentNode = $this->head;
+        while($currentNode !==null )
+        {   
+            echo $currentNode->data." ";
+            $currentNode = $currentNode->nextNode;
+        }
+        echo "\n";
+    }
+    
+    public function searchNode(int $data)
+    {
+        
+    }
+}
+
+class LinkLIstCommandList
+{
+    private LinkedList $linkedList;
+    
+    public function __construct(LinkedList $linkedList)
+    {
+        $this->linkedList = $linkedList;
+    }
+    
+    public function showMainMessage(): void
+    {
+        echo "\n1. Insert a new Node at the end of the list  \n2. Delete a node by its value \n3. Traverse and print all the elements in the list  \n4. Search for a node by its value \n";
+    }
+    
+    public function showMessage(string $message): string
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $question): string
+    {
+        $a= readline($question); 
+        return $a;
+    }
+    
+    public function startFlow()
+    {
+        $this->showMainMessage();
+        $a=$this->getAnswer("");
+        
+        switch($a)
+        {
+            case 1:
+                $a = (int)$this->getAnswer("enter the value to add: ");
+                $this->linkedList->insertNodeAtEnd($a);
+                echo "Data added !\n";
+                break;
+            case 2:
+                $a = (int)$this->getAnswer("enter the values to Delete : \n");
+                break;
+            case 3:
+                $this->linkedList->printList();
+                break;
+            case 4:
+                break;
+            
+        }       
+     $this->startFlow();        
+    }
+
+}
+
+
+$linkedList = new LinkedList();
+$LinkLIstCommandList = new LinkLIstCommandList($linkedList);
+$LinkLIstCommandList->startFlow();
+
+?>
