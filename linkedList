@@ -16,6 +16,8 @@ class LinkedList
 {
     public ?Node $head;
     
+
+    
     public function __construct()
     {
         $this->head =null;
@@ -51,24 +53,24 @@ class LinkedList
     public function deleteNode(int $data)
     {   
         //atStart
-        $p = $this->head;
-        $q = $p->nextNode;
-        if($p->data === $data )
+        $curretNode = $this->head;
+        $currentNext = $curretNode->nextNode;
+        if($curretNode->data === $data )
         {
-            $this->head = $q;
+            $this->head = $currentNext;
         }else
         {
-            while($q->data != $data)
+            while($currentNext->data != $data)
             {   
-                $p = $p->nextNode;
-                $q = $q->nextNode;
+                $curretNode = $curretNode->nextNode;
+                $currentNext = $currentNext->nextNode;
             }  
-            if($q->nextNode == null)
+            if($currentNext->nextNode == null)
             {   //atEnd
-                $p->nextNode = null;
+                $curretNode->nextNode = null;
             }else
             {   //atMiddle
-                $p->nextNode = $q->nextNode;
+                $curretNode->nextNode = $currentNext->nextNode;
             }
             
         }
@@ -87,7 +89,20 @@ class LinkedList
     
     public function searchNode(int $data)
     {
-        
+        $currentNode = $this->head;
+        while($currentNode !== null)
+        {
+            if($currentNode->data === $data)
+            {
+               echo "Its a match !\n";
+               return ;
+            }
+            $currentNode=$currentNode->nextNode;
+        }
+            
+        echo "It is not a match\n";
+            
+       
     }
 }
 
@@ -141,6 +156,8 @@ class LinkLIstCommandList
                 $this->linkedList->printList();
                 break;
             case 4:
+                 $a = (int)$this->getAnswer("enter the value to search : \n");
+                 $this->linkedList->searchNode($a);
                 break;
             
         }       
