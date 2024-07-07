@@ -50,12 +50,29 @@ class LinkedList
     
     public function deleteNode(int $data)
     {   
-        
-        $currentNode= $this->head;
-        if($currentNode->data===$data)
+        //atStart
+        $p = $this->head;
+        $q = $p->nextNode;
+        if($p->data === $data )
         {
+            $this->head = $q;
+        }else
+        {
+            while($q->data != $data)
+            {   
+                $p = $p->nextNode;
+                $q = $q->nextNode;
+            }  
+            if($q->nextNode == null)
+            {   //atEnd
+                $p->nextNode = null;
+            }else
+            {   //atMiddle
+                $p->nextNode = $q->nextNode;
+            }
             
         }
+        
     }
     public function printList() 
     {
@@ -88,7 +105,7 @@ class LinkLIstCommandList
         echo "\n1. Insert a new Node at the end of the list  \n2. Delete a node by its value \n3. Traverse and print all the elements in the list  \n4. Search for a node by its value \n";
     }
     
-    public function showMessage(string $message): string
+    public function showMessage(string $message): void
     {
         echo $message;
     }
@@ -109,10 +126,16 @@ class LinkLIstCommandList
             case 1:
                 $a = (int)$this->getAnswer("enter the value to add: ");
                 $this->linkedList->insertNodeAtEnd($a);
-                echo "Data added !\n";
+                $this->showMessage("Value added to the list \n");
                 break;
             case 2:
-                $a = (int)$this->getAnswer("enter the values to Delete : \n");
+                $this->linkedList->printList();
+                $a = (int)$this->getAnswer("enter the value to Delete : \n");
+                $this->linkedList->deleteNode($a);
+                $this->showMessage("Value deleted \n");
+                $this->showMessage("New List : \n");
+                $this->linkedList->printList();
+                
                 break;
             case 3:
                 $this->linkedList->printList();
