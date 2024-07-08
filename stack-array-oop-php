@@ -1,0 +1,119 @@
+<?php
+class StackElement
+{
+    private int $element;
+    
+    public function __construct(int $element)
+    {
+        $this->element= $element;
+    }
+    
+    public function __toString() :string
+    {
+        return (string)$this->element;
+    }
+    
+    
+}
+
+class Stack
+{
+    private array $stackElements;
+    private int $stackPointer;
+    
+    public function __construct()
+    {   
+        $this->stackElements = [];
+        $this->stackPointer = -1;
+    }
+    
+    public function pushElement(int $element) : void
+    {
+        $newElement = new StackElement($element);
+        $this->stackPointer++;
+        $this->stackElements[$this->stackPointer] = $newElement;
+        echo "Element added to the top ! \n";
+    }
+    
+    public function popElement() : void
+    {
+        if($this->stackPointer === -1)
+        {
+            echo "Underflow Stack !\n";
+            return;
+        }
+        else
+        {   
+            $topElement = $this->stackElements[$this->stackPointer];
+            $this->stackPointer--;
+            echo "Top element : $topElement removed from the stack ! \n";
+        }
+    }
+    
+    public function printTravElements(): void
+    {
+        /*foreach($this->stackElements as $item)
+        {
+            echo $item. "\n";
+        }*/
+        for ($i = $this->stackPointer; $i >= 0; $i--)
+        {
+            echo $this->stackElements[$i] . "\n";
+        }
+    }
+}
+
+class StackCommandLine
+{
+    private Stack $stack;
+    
+    public function __construct(Stack $stack)
+    {   
+        $this->stack = $stack;
+    }
+    
+    public function showMainMessage() : void
+    {
+        echo "\n1. Add an element to the stack. \n2. Remove an element from the stack. \n3. Traverse print all the elements .\n";
+    }
+    
+    public function showMessage(string $message) : void
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $question) : string
+    {
+        $answer = readline($question);
+        return $answer;
+    }
+    
+    public function startFlow()
+    {
+        $this->showMainMessage();
+        $ans = $this->getAnswer("");
+        
+        switch($ans)
+        {
+            case 1:
+                $element =(int) $this->getAnswer("enter the new element : \n");
+                $this->stack->pushElement($element);
+                break;
+            case 2:
+                $this->stack->popElement();
+                break;
+            case 3:
+                $this->stack->printTravElements();
+                break;
+            case 4:
+                exit;
+        }
+     $this->startFlow();
+    } 
+}
+
+
+$stack = new Stack();
+$stackCommandList = new StackCommandLine($stack);
+$stackCommandList->startFlow();
+?>
