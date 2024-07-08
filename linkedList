@@ -15,14 +15,12 @@ class Node
 class LinkedList
 {
     public ?Node $head;
-    
 
-    
+
     public function __construct()
     {
         $this->head =null;
     }
-    
     
     public function insertNodeAtstart(int $data) :void
     {
@@ -101,8 +99,6 @@ class LinkedList
         }
             
         echo "It is not a match\n";
-            
-       
     }
 }
 
@@ -165,7 +161,6 @@ class LinkLIstCommandList
     }
 
 }
-
 
 $linkedList = new LinkedList();
 $LinkLIstCommandList = new LinkLIstCommandList($linkedList);
