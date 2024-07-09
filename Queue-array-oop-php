@@ -1,0 +1,137 @@
+<?php
+class QueueElement
+{
+    private int $element;
+    
+    public function __construct(int $element)
+    {
+        $this->element= $element;
+    }
+    
+    public function __toString() :string
+    {
+        return (string)$this->element;
+    }
+    
+    
+}
+
+class Queue
+{
+    private array $queueElements;
+    private int $front;
+    private int $rear;
+    
+    public function __construct()
+    {   
+        $this->queueElements = [];
+        $this->front = -1;
+        $this->rear = -1;
+    }
+    
+    public function enqueueElement(int $element) : void
+    {
+        if($this->front == -1 && $this->rear == -1)
+        {
+            $this->front = $this->rear = 0;
+            $this->queueElements[$this->rear] = $element;
+        }else
+        {
+            $this->rear++;
+            $this->queueElements[$this->rear] = $element;
+        }
+        echo "Element added to the queue ! \n";
+    }
+    
+    public function dequeueElement() : void
+    {
+        if($this->front == -1 && $this->rear == -1)
+        {
+            echo "Underflow Queue !\n";
+            return;
+        }
+        else if($this->front == $this->rear)
+        {   
+            $this->front = $this->rear = -1;
+        }else 
+        {
+            $frontElement = $this->queueElements[$this->front];
+            $this->front++;
+            echo "First element : $frontElement removed from the queue ! \n";
+        }
+        
+        
+    }
+    
+    public function printTravElements(): void
+    {
+       if($this->front == -1 && $this->rear == -1)
+        {
+            echo "Underflow Queue !\n";
+            return;
+        }
+        else 
+        {
+            for($i = $this->front; $i < $this->rear+1 ; $i++)
+            echo $this->queueElements[$i] . " ";
+        }
+    }
+}
+
+class QueueCommandLine
+{
+    private Queue $queue;
+    
+    public function __construct(Queue $queue)
+    {   
+        $this->queue = $queue;
+    }
+    
+    public function showMainMessage() : void
+    {
+        echo "\n1. Add an element to the Queue. \n2. Remove an element from the Queue. \n3. Traverse print all the elements .\n";
+    }
+    
+    public function showMessage(string $message) : void
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $question) : string
+    {
+        $answer = readline($question);
+        return $answer;
+    }
+    
+    public function startFlow()
+    {
+        $this->showMainMessage();
+        $ans = $this->getAnswer("");
+        
+        switch($ans)
+        {
+            case 1:
+                $element =(int) $this->getAnswer("enter the new element : \n");
+                $this->queue->enqueueElement($element);
+                break;
+            case 2:
+                $this->queue->dequeueElement();
+                echo "Updated Queue : \n";
+                $this->queue->printTravElements();
+        echo "\n";
+                break;
+            case 3:
+                $this->queue->printTravElements();
+                break;
+            case 4:
+                exit;
+        }
+     $this->startFlow();
+    } 
+}
+
+
+$queue = new Queue();
+$queueCommandLine = new QueueCommandLine($queue);
+$queueCommandLine->startFlow();
+?>
