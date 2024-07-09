@@ -1,0 +1,161 @@
+<?php
+class QueueElement 
+{
+    public int $data;
+    public ?QueueElement $next;
+    
+    public function __construct(int $data)
+    {
+        $this->data = $data;
+        $this->next = null;
+    }
+    public function __toString() :string
+    {
+        return (string)$this->data;
+    }
+    
+}
+
+class Queue
+{
+    public ?QueueElement $front;
+    public ?QueueElement $rear;
+
+
+    public function __construct()
+    {
+        $this->front =null;
+        $this->rear =null;
+    }
+    
+    public function enqueueElement(int $data) : void
+    {  
+        $queueElement = new QueueElement($data);
+        $queueElement->next = null;
+        if($this->front ==null && $this->rear ==null)
+        {
+            $this->front = $this->rear = $queueElement;
+        }
+        else
+        {   
+            $this->rear->next = $queueElement;
+            $this->rear = $queueElement;
+            
+        }
+        echo "Element added to the Queue ! \n";
+    }
+    
+    public function dequeElement()
+    {   
+        if($this->front === null && $this->rear === null)
+        {
+            echo "Queue is empty !\n";
+            return;
+        }
+        else
+        {
+            $current = $this->front;
+            $currentNext = $current->next;
+            $this->front = $currentNext;
+            echo "First element : $current removed from the queue ! \n";
+            echo "Updated queue : \n";
+            $this->printList();
+        }
+        
+    }
+    public function printList() 
+    {
+        if($this->front === null && $this->rear === null)
+        {
+            echo "Queue is empty !\n";
+            return;
+        }
+        else
+        {
+            $currentNode = $this->front;
+            while($currentNode !==null )
+            {   
+                echo $currentNode->data." ";
+                $currentNode = $currentNode->next;
+                echo " ";
+            }
+            echo "\n";
+        }
+    }
+    
+    public function searchNode(int $data)
+    {
+        $currentNode = $this->front;
+        while($currentNode !== null)
+        {
+            if($currentNode->data === $data)
+            {
+               echo "Its a match !\n";
+               return ;
+            }
+            $currentNode=$currentNode->next;
+        }
+            
+        echo "It is not a match\n";
+    }
+}
+
+class QueueCommandList
+{
+    private Queue $queue;
+    
+    public function __construct(Queue $queue)
+    {
+        $this->queue = $queue;
+    }
+    
+    public function showMainMessage(): void
+    {
+        echo "\n1. Insert a new value  \n2. Delete a value \n3. Traverse and print the Queue  \n4. Search for a element by its value \n";
+    }
+    
+    public function showMessage(string $message): void
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $question): string
+    {
+        $a= readline($question); 
+        return $a;
+    }
+    
+    public function startFlow()
+    {
+        $this->showMainMessage();
+        $a=$this->getAnswer("");
+        
+        switch($a)
+        {
+            case 1:
+                $a = (int)$this->getAnswer("enter the value to add: ");
+                $this->queue->enqueueElement($a);
+                break;
+            case 2:
+                $this->queue->printList();
+                $this->queue->dequeElement();
+                break;
+            case 3:
+                $this->queue->printList();
+                break;
+            case 4:
+                 $a = (int)$this->getAnswer("enter the value to search : \n");
+                 $this->queue->searchNode($a);
+                break;
+            
+        }       
+     $this->startFlow();        
+    }
+
+}
+
+$queue = new Queue();
+$queueCommandList = new QueueCommandList($queue);
+$queueCommandList->startFlow();
+
+?>
