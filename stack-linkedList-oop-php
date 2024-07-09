@@ -1,0 +1,151 @@
+<?php
+class StackElement 
+{
+    public int $data;
+    public ?StackElement $next;
+    
+    public function __construct(int $data)
+    {
+        $this->data = $data;
+        $this->next = null;
+    }
+    public function __toString() :string
+    {
+        return (string)$this->data;
+    }
+    
+}
+
+class Stack
+{
+    public ?StackElement $top;
+
+
+    public function __construct()
+    {
+        $this->top =null;
+    }
+    
+    public function insertNodeAtstart(int $data) :void
+    {
+        $newNode = new Node($data);
+        $newNode->next= $this->top;
+        $this->top = $newNode ;
+        
+    }
+    
+    public function pushElement(int $data) : void
+    {  
+        $newStackElement = new StackElement($data);
+        $newStackElement->next = $this->top;
+        $this->top = $newStackElement;
+        
+        echo "Element added to the top ! \n";
+    }
+    
+    public function popElement()
+    {   
+        if($this->top === null)
+        {
+            echo "Stack is empty !\n";
+            return;
+        }
+        else
+        {
+            $current = $this->top;
+            $currentNext = $current->next;
+            $this->top = $currentNext;
+            echo "Top element : $current removed from the stack ! \n";
+            echo "New Stack : \n";
+            $this->printList();
+        }
+        
+    }
+    public function printList() 
+    {
+        $currentNode = $this->top;
+        while($currentNode !==null )
+        {   
+            echo $currentNode->data." ";
+            $currentNode = $currentNode->next;
+            echo "\n";
+        }
+        echo "\n";
+    }
+    
+    public function searchNode(int $data)
+    {
+        $currentNode = $this->top;
+        while($currentNode !== null)
+        {
+            if($currentNode->data === $data)
+            {
+               echo "Its a match !\n";
+               return ;
+            }
+            $currentNode=$currentNode->next;
+        }
+            
+        echo "It is not a match\n";
+    }
+}
+
+class StackCommandList
+{
+    private Stack $stack;
+    
+    public function __construct(Stack $stack)
+    {
+        $this->stack = $stack;
+    }
+    
+    public function showMainMessage(): void
+    {
+        echo "\n1. Insert a new value  \n2. Delete a value \n3. Traverse and print the Stack  \n4. Search for a node by its value \n";
+    }
+    
+    public function showMessage(string $message): void
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $question): string
+    {
+        $a= readline($question); 
+        return $a;
+    }
+    
+    public function startFlow()
+    {
+        $this->showMainMessage();
+        $a=$this->getAnswer("");
+        
+        switch($a)
+        {
+            case 1:
+                $a = (int)$this->getAnswer("enter the value to add: ");
+                $this->stack->pushElement($a);
+                break;
+            case 2:
+                $this->stack->printList();
+                $this->stack->popElement();
+                break;
+            case 3:
+                $this->stack->printList();
+                break;
+            case 4:
+                 $a = (int)$this->getAnswer("enter the value to search : \n");
+                 $this->stack->searchNode($a);
+                break;
+            
+        }       
+     $this->startFlow();        
+    }
+
+}
+
+$stack = new Stack();
+$stackCommandList = new StackCommandList($stack);
+$stackCommandList->startFlow();
+
+?>
