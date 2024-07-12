@@ -59,7 +59,6 @@ class Queue
             $this->front = $currentNext;
             echo "First element : $current removed from the queue ! \n";
             echo "Updated queue : \n";
-            $this->printList();
         }
         
     }
@@ -139,6 +138,7 @@ class QueueCommandList
             case 2:
                 $this->queue->printList();
                 $this->queue->dequeElement();
+                $this->queue->printList();
                 break;
             case 3:
                 $this->queue->printList();
