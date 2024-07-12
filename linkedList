@@ -67,7 +67,8 @@ class LinkedList
             if($currentNext->nextNode == null)
             {   //atEnd
                 $curretNode->nextNode = null;
-            }else
+            }
+            else
             {   //atMiddle
                 $curretNode->nextNode = $currentNext->nextNode;
             }
