@@ -1,0 +1,60 @@
+<?php
+class HashData
+{
+    public string $key;
+    public string $value;
+    
+    public function __construct(string $key , string $value)
+    {
+        $this->key = $key;
+        $this->value = $value;
+    
+    }
+}
+
+class HashTable
+{
+    public array $hashItems;
+    private int $size;
+    
+    public function __construct()
+    {
+        $this->size = $size;
+        $this->hashItems = array_fill(0, $size, []);
+    }
+    
+    public function hashFunction(string $key) : int
+    {
+        $hash = 0;
+        $len = strlen($key);
+        for($i = 0; $i < $len ; $i++)
+        {
+            $hash += ord($key[$i]);
+        }
+        return $hash % $this->size;
+  
+    }
+    
+    public function setItem(string $key,string $value) 
+    {   
+        $index = $this->hashFunction($key, $this->hashItems);
+        $this->hashItems[$index] = $value; 
+    }
+    
+    public function getItem($key)
+    {
+        $item = $this->hashFunction($key, $this->hashItems);
+        return $this->hashItems[$item];
+        
+    }
+    
+    
+}
+
+$hTable = new HashTable();
+$hTable->setItem("little","John");
+$hTable->setItem("Mad","max");
+$hTable->getItem("little");
+echo $hTable->getItem("little");
+echo $hTable->getItem("Mad");
+?>
