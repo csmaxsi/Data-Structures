@@ -57,7 +57,6 @@ class Stack
             $this->top = $currentNext;
             echo "Top element : $current removed from the stack ! \n";
             echo "New Stack : \n";
-            $this->printList();
         }
         
     }
@@ -129,6 +128,7 @@ class StackCommandList
             case 2:
                 $this->stack->printList();
                 $this->stack->popElement();
+                $this->stack->printList();
                 break;
             case 3:
                 $this->stack->printList();
