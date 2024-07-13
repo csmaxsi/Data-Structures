@@ -1,8 +1,8 @@
 <?php
 class HashData
 {
-    public string $key;
-    public string $value;
+    private string $key;
+    private string $value;
     
     public function __construct(string $key , string $value)
     {
@@ -17,13 +17,13 @@ class HashTable
     public array $hashItems;
     private int $size;
     
-    public function __construct()
+    public function __construct(int $size =3)
     {
         $this->size = $size;
         $this->hashItems = array_fill(0, $size, []);
     }
     
-    public function hashFunction(string $key) : int
+    private function hashFunction(string $key) : int
     {
         $hash = 0;
         $len = strlen($key);
@@ -35,13 +35,13 @@ class HashTable
   
     }
     
-    public function setItem(string $key,string $value) 
+    public function setItem(string $key,string $value) : void
     {   
         $index = $this->hashFunction($key, $this->hashItems);
         $this->hashItems[$index] = $value; 
     }
     
-    public function getItem($key)
+    public function getItem($key) : string 
     {
         $item = $this->hashFunction($key, $this->hashItems);
         return $this->hashItems[$item];
@@ -51,10 +51,56 @@ class HashTable
     
 }
 
+class HashCommandLine
+{
+    private HashTable $hashTable;
+    
+    public function __construct(HashTable $hashTable)
+    {
+        $this->hashTable = $hashTable;
+    }
+    
+    public function showMainMessage()
+    {
+        echo "\n1.Insert data \n2.Delete data \n3.Find data \n";
+    }
+    
+    public function showMessage(string $message): void
+    {
+        echo $message;
+    }
+    
+    public function getAnswer(string $message): string
+    {
+        $ans = readline($message);
+        return $ans;
+    }
+    
+    public function startFlow() 
+    {
+        $this->showMainMessage();
+        $a = $this->getAnswer("");
+        
+        switch($a)
+        {
+            case 1:
+                $key = $this->getAnswer("Enter Key : ");
+                $val = $this->getAnswer("Enter Value : ");
+                $this->hashTable->setItem($key,$val);
+                echo "Data inserted !\n";
+                break;
+            case 2:
+                break;
+            case 3:
+                $key = $this->getAnswer("Enter Key : ");
+                echo $this->hashTable->getItem($key)."\n";
+                break;
+        }
+       $this->startFlow(); 
+    }
+}
+
 $hTable = new HashTable();
-$hTable->setItem("little","John");
-$hTable->setItem("Mad","max");
-$hTable->getItem("little");
-echo $hTable->getItem("little");
-echo $hTable->getItem("Mad");
+$hCommandLine = new HashCommandLine($hTable);
+$hCommandLine->startFlow();
 ?>
