@@ -16,8 +16,9 @@ class HashTable
 {
     public array $hashItems;
     private int $size;
+   
     
-    public function __construct(int $size =3)
+    public function __construct(int $size =17)
     {
         $this->size = $size;
         $this->hashItems = array_fill(0, $size, []);
@@ -35,16 +36,69 @@ class HashTable
   
     }
     
+    
     public function setItem(string $key,string $value) : void
     {   
+        
         $index = $this->hashFunction($key, $this->hashItems);
-        $this->hashItems[$index] = $value; 
+       
+        foreach ($this->hashItems[$index] as $item)
+        {
+            if ($item[0] === $key) 
+            {
+                echo "Duplicated key. Enter a new Key !\n";
+                return;
+            }
+        }
+       
+        $this->hashItems[$index][] = [$key,[$value]];
+        echo "Data inserted !\n";
+    
     }
     
-    public function getItem($key) : string 
+    public function getItem(string $key) : string 
     {
-        $item = $this->hashFunction($key, $this->hashItems);
-        return $this->hashItems[$item];
+        $index = $this->hashFunction($key, $this->hashItems);
+        if(!$this->hashItems[$index])
+        {
+            $handleNull = "No mathing key !\n";
+            return $handleNull;
+        }
+        else if(isset($this->hashItems[$index]))
+        {
+            foreach ($this->hashItems[$index] as $item) 
+            {
+                if ($item[0] === $key) 
+                {
+                    //convert the array to string 
+                    return implode(", ", $item[1]);
+                }
+            }
+        }  
+        
+    }
+    
+    public function deleteItem(string $key) : void
+    {
+        $index = $this->hashFunction($key, $this->hashItems);
+        if(!$this->hashItems[$index])
+        {
+            echo "No mathing key !\n";
+            
+        }
+        else if(isset($this->hashItems[$index]))
+        {
+            foreach ($this->hashItems[$index] as $i=>$item) 
+            {
+                if ($item[0] === $key) 
+                {
+                    //convert the array to string 
+                    unset($this->hashItems[$index][$i]);
+                    echo "Data removed !\n";
+                }
+            }
+        }  
+        
         
     }
     
@@ -87,13 +141,16 @@ class HashCommandLine
                 $key = $this->getAnswer("Enter Key : ");
                 $val = $this->getAnswer("Enter Value : ");
                 $this->hashTable->setItem($key,$val);
-                echo "Data inserted !\n";
+                
                 break;
             case 2:
+                $key = $this->getAnswer("Enter Key : ");
+                $this->hashTable->deleteItem($key);
                 break;
             case 3:
                 $key = $this->getAnswer("Enter Key : ");
                 echo $this->hashTable->getItem($key)."\n";
+                
                 break;
         }
        $this->startFlow(); 
