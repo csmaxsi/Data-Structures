@@ -88,11 +88,12 @@ class HashTable
         }
         else if(isset($this->hashItems[$index]))
         {
+            //refers to the bucket at the position $index in the hashItems array.
             foreach ($this->hashItems[$index] as $i=>$item) 
             {
                 if ($item[0] === $key) 
                 {
-                    //convert the array to string 
+                    //removes the key-value pair at position $i within the bucket at $index 
                     unset($this->hashItems[$index][$i]);
                     echo "Data removed !\n";
                 }
