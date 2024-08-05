@@ -1,3 +1,5 @@
+
+
 <?php
 class HashData
 {
@@ -8,7 +10,26 @@ class HashData
     {
         $this->key = $key;
         $this->value = $value;
+    }
     
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+    
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+    
+    public function setKey(string $key): void
+    {
+        $this->key = $key;
+    }
+    
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
     }
 }
 
@@ -40,67 +61,47 @@ class HashTable
     public function setItem(string $key,string $value) : void
     {   
         
-        $index = $this->hashFunction($key, $this->hashItems);
-       
-        foreach ($this->hashItems[$index] as $item)
-        {
-            if ($item[0] === $key) 
-            {
-                echo "Duplicated key. Enter a new Key !\n";
-                return;
-            }
+        $newHash = new HashData($key, $value);
+        $index = $this->hashFunction($key);
+        
+         if (isset($this->hashItems[$index][$key])) 
+         {
+            echo "Duplicated Data!\n";
+            return;
         }
        
-        $this->hashItems[$index][] = [$key,[$value]];
+        $this->hashItems[$index][$key] = $newHash;
         echo "Data inserted !\n";
     
     }
+
     
     public function getItem(string $key) : string 
     {
-        $index = $this->hashFunction($key, $this->hashItems);
-        if(!$this->hashItems[$index])
+        $index = $this->hashFunction($key);
+  
+        if(isset($this->hashItems[$index][$key])) 
         {
-            $handleNull = "No mathing key !\n";
-            return $handleNull;
-        }
-        else if(isset($this->hashItems[$index]))
-        {
-            foreach ($this->hashItems[$index] as $item) 
-            {
-                if ($item[0] === $key) 
-                {
-                    //convert the array to string 
-                    return implode(", ", $item[1]);
-                }
-            }
+            return $this->hashItems[$index][$key]->getValue();
         }  
         
+        echo "No matching Key !\n";
+        return;
     }
     
-    public function deleteItem(string $key) : void
+    public function deleteItem(string $key) : string
     {
-        $index = $this->hashFunction($key, $this->hashItems);
-        if(!$this->hashItems[$index])
+        $index = $this->hashFunction($key);
+       
+        if(isset($this->hashItems[$index][$key])) 
         {
-            echo "No mathing key !\n";
-            
-        }
-        else if(isset($this->hashItems[$index]))
-        {
-            //refers to the bucket at the position $index in the hashItems array.
-            foreach ($this->hashItems[$index] as $i=>$item) 
-            {
-                if ($item[0] === $key) 
-                {
-                    //removes the key-value pair at position $i within the bucket at $index 
-                    unset($this->hashItems[$index][$i]);
-                    echo "Data removed !\n";
-                }
-            }
+            unset($this->hashItems[$index][$key]);
+            echo "Data Deleted !\n";
+            return;
         }  
         
-        
+        echo "No matching Key !\n";
+        return;
     }
     
     
@@ -162,3 +163,4 @@ $hTable = new HashTable();
 $hCommandLine = new HashCommandLine($hTable);
 $hCommandLine->startFlow();
 ?>
+
