@@ -83,13 +83,14 @@ class HashTable
         if(isset($this->hashItems[$index][$key])) 
         {
             return $this->hashItems[$index][$key]->getValue();
+            
         }  
         
-        echo "No matching Key !\n";
-        return;
+        return "No matching Key !\n";
+        
     }
     
-    public function deleteItem(string $key) : string
+    public function deleteItem(string $key) : void
     {
         $index = $this->hashFunction($key);
        
@@ -101,7 +102,21 @@ class HashTable
         }  
         
         echo "No matching Key !\n";
-        return;
+    }
+    
+    public function updateItem(string $key , string $value) : void
+    {
+        $index =$this->hashFunction($key);
+        
+        if( isset($this->hashItems[$index][$key]))
+        {
+            $newHash = new HashData($key,$value);
+            $this->hashItems[$index][$key] = $newHash;
+            echo "Value updated !\n";
+            return;
+        }
+        
+        echo "Invalid credentials \n";
     }
     
     
@@ -118,7 +133,7 @@ class HashCommandLine
     
     public function showMainMessage()
     {
-        echo "\n1.Insert data \n2.Delete data \n3.Find data \n";
+        echo "\n1.Insert data \n2.Delete data \n3.Find data \n4.Update data \n";
     }
     
     public function showMessage(string $message): void
@@ -151,8 +166,11 @@ class HashCommandLine
                 break;
             case 3:
                 $key = $this->getAnswer("Enter Key : ");
-                echo $this->hashTable->getItem($key)."\n";
-                
+                echo "value :".$this->hashTable->getItem($key)."\n";
+            case 4:
+                $key =$this->getAnswer("Enter Key : ");
+                $val =$this->getAnswer("Enter New Value : ");
+                $this->hashTable->updateItem($key,$val);
                 break;
         }
        $this->startFlow(); 
